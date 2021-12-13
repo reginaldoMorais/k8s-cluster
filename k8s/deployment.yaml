@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-js-test
+  labels:
+    app: k8s-js-test
+  namespace: staging
+spec:
+  selector:
+    matchLabels:
+      app: k8s-js-test
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "k8s-js-test"
+    spec:
+      containers:
+        - name: k8s-js-test
+          image: "reginaldom/k8s-js-test:0.0.1"
+
+          resources:
+            requests:
+              cpu: "1"
+              memory: 1Gi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 11
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 1
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 1
+            timeoutSeconds: 1
+            successThreshold: 1
+
+          volumeMounts:
+            - mountPath: "/app/projects"
+              name: k8s-js-test-volume
+              readOnly: false
+
+      volumes:
+        - name: k8s-js-test-volume
+          persistentVolumeClaim:
+            claimName: k8s-js-test-pvc
