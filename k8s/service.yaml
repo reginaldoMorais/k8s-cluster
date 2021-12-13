@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-js-test-service
+spec:
+  selector:
+    app: k8s-js-test
+  type: ClusterIP
+  ports:
+    - name: k8s-js-test-service
+      port: 80
+      targetPort: 8080
+      protocol: TCP

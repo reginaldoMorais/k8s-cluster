@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: server-k8s-js-test
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: server-k8s-js-test-read
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "watch", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: server-k8s-js-test-read-bind
+subjects:
+  - kind: ServiceAccount
+    name: server-k8s-js-test
+    namespace: production
+roleRef:
+  kind: Role
+  name: server-k8s-js-test-read
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-js-test-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    name: k8s-js-test
+    kind: Deployment
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 25
